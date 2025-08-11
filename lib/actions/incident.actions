@@ -1,0 +1,25 @@
+"use server"
+
+import { revalidatePath } from "next/cache"
+import { supabase } from "@/lib/supabase"
+import type { Incident } from "@/lib/supabase"
+
+export type CreateIncidentData = {
+  client_id: string
+  employee_id: string
+  type: 'AGRESION' | 'ACOSO' | 'CONSUMO_DROGAS' | 'ROBO' | 'DANOS' | 'ALTERACION_ORDEN' | 'DOCUMENTO_FALSO' | 'EXCESO_ALCOHOL' | 'AMENAZAS' | 'ACCESO_NO_AUTORIZADO'
+  description: string
+  severity: 1 | 2 | 3 | 4 | 5
+  location?: string
+  evidence_urls?: string[]
+  witnesses?: string[]
+}
+
+export async function createIncident(data: CreateIncidentData) {
+  const { error } = await supabase.from("incidents").insert([data])
+
+  if (error) throw error
+
+  revalidatePath("/incidents")
+}
+

@@ -1,0 +1,1 @@
+export const SCANDIT_LICENSE_KEY = process.env.NEXT_PUBLIC_SCANDIT_LICENSE!;
